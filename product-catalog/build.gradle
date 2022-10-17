@@ -1,0 +1,74 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven{
+            url "https://repo.spring.io/libs-release/"
+        }
+    }
+    dependencies {
+        classpath "com.palantir.gradle.docker:gradle-docker:0.25.0"
+        classpath "com.palantir.docker-run:com.palantir.docker-run.gradle.plugin:0.25.0"
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '1.5.22.RELEASE'
+    id 'com.palantir.docker' version '0.25.0'
+    id 'com.palantir.docker-run' version "0.25.0"
+}
+
+
+group 'com.oracle.test'
+version '1.0'
+
+apply plugin: 'java'
+
+
+jar {
+    archiveName('product-catalog.jar')
+}
+
+
+docker {
+    dependsOn build
+    name "sajithsanal/product-catalog-docker:${project.version}"
+    dockerfile file('Dockerfile')
+    files jar.archivePath
+    buildArgs(['JAR_FILE': "${jar.getArchiveName()}"])
+}
+
+
+dockerRun {
+    name "${project.name}"
+    image "sajithsanal/product-catalog-docker:${project.version}"
+    ports '8080:8080'
+    clean true
+}
+
+task deployToKubernetes(type:Exec) {
+    workingDir "$buildDir"
+    commandLine "kubectl", "apply", "-f", "$buildDir/../Deployment.yaml"
+
+}
+
+task addServiceToKubernetes(type:Exec) {
+    workingDir "$buildDir"
+    commandLine "kubectl", "apply", "-f", "$buildDir/../Service.yaml"
+
+}
+
+
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':ticketing-common')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.3.4.RELEASE'
+}

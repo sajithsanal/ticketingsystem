@@ -1,0 +1,8 @@
+rootProject.name = 'ticketing-system'
+include 'agent-sysem'
+include 'product-catalog'
+include 'customer-system'
+include 'ticketing-service'
+include 'common-lib'
+include 'ticketing-common'
+

@@ -1,4 +1,4 @@
-package com.oracle.agent.entity;
+package com.sample.agent.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

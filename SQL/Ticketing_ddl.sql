@@ -1,4 +1,7 @@
 create schema ticketing_schema;
+set sql_mode = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+create user 'app_user'@'' identified by '2020MyP@ssw0rd';
+grant all privileges on ticketing_schema.* to app_user@'';
 
 CREATE TABLE `ticketing_schema`.`product_details` (
 id INT AUTO_INCREMENT,
@@ -41,7 +44,7 @@ CREATE TABLE `ticketing_schema`.`ticket_details` (
     PRIMARY KEY(ticket_id)
     );
 
-    CREATE TABLE `ticketing_schema`.`ticket_trans_details` (
+CREATE TABLE `ticketing_schema`.`ticket_trans_details` (
         id INT AUTO_INCREMENT,
         ticket_id INT NOT NULL REFERENCES ticket_details(ticket_id),
         notes TEXT,
@@ -52,7 +55,7 @@ CREATE TABLE `ticketing_schema`.`ticket_details` (
         );
 
 
-        CREATE TABLE `ticketing_schema`.`ticket_attachments` (
+CREATE TABLE `ticketing_schema`.`ticket_attachments` (
                 id INT AUTO_INCREMENT,
                 ticket_id INT,
                 trans_id INT,
@@ -78,7 +81,7 @@ create table `ticketing_schema`.`ticket_details_aud` (
         primary key (ticket_id, rev)
     );
 
-	create table `ticketing_schema`.`ticket_trans_details_aud` (
+create table `ticketing_schema`.`ticket_trans_details_aud` (
        id bigint not null,
         rev integer not null,
         revtype tinyint,
@@ -90,7 +93,7 @@ create table `ticketing_schema`.`ticket_details_aud` (
         primary key (id, rev)
     );
 
-    create table `ticketing_schema`.`REVINFO` (
+ create table `ticketing_schema`.`REVINFO` (
             REV integer AUTO_INCREMENT,
             REVTSTMP bigint,
             primary key (REV)

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oracle.ticketing.dto.agent.AgentDetailsDTO;
 import com.oracle.ticketing.dto.customer.CustomerDTO;
 import com.oracle.ticketing.exception.TicketingException;
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

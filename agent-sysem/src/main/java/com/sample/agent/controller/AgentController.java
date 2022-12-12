@@ -1,8 +1,8 @@
-package com.oracle.agent.controller;
+package com.sample.agent.controller;
 
 
-import com.oracle.agent.entity.AgentDetailsEntity;
-import com.oracle.agent.service.AgentService;
+import com.sample.agent.entity.AgentDetailsEntity;
+import com.sample.agent.service.AgentService;
 import com.oracle.ticketing.dto.agent.AgentDetailsDTO;
 import com.oracle.ticketing.dto.common.TransRespDTO;
 import com.oracle.ticketing.exception.TicketingException;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

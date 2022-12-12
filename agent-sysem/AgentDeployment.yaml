@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: agent
+  name: agent-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agent
+  template:
+    metadata:
+      labels:
+        app: agent
+    spec:
+      containers:
+      - image: sajithsanal/agent-system-docker:1.4
+        name: agent-system-docker
+        env:
+          - name: DB_READ_HOST
+            value: "mysql-read"
+          - name: DB_READ_USER
+            value: "app_user"
+          - name: DB_READ_PASSWORD
+            value: "2020MyP@ssw0rd"
+          - name: DB_READ_HOST_PORT
+            value: "3306"
+          - name: DB_WRITE_HOST
+            value: "mysql-0.mysql"
+          - name: DB_WRITE_USER
+            value: "app_user"
+          - name: DB_WRITE_PASSWORD
+            value: "2020MyP@ssw0rd"
+          - name: DB_WRITE_HOST_PORT
+            value: "3306"
+

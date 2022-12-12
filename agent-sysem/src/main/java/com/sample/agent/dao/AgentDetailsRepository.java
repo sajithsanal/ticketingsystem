@@ -1,6 +1,6 @@
-package com.oracle.agent.dao;
+package com.sample.agent.dao;
 
-import com.oracle.agent.entity.AgentDetailsEntity;
+import com.sample.agent.entity.AgentDetailsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AgentDetailsRepository extends JpaRepository<AgentDetailsEntity, Long> {

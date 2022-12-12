@@ -1,9 +1,10 @@
-package com.oracle.agent.service;
+package com.sample.agent.service;
 
-import com.oracle.agent.dao.AgentDetailsRepository;
-import com.oracle.agent.entity.AgentDetailsEntity;
+import com.oracle.ticketing.config.DbContextHolder;
+import com.oracle.ticketing.config.DbType;
+import com.sample.agent.dao.AgentDetailsRepository;
+import com.sample.agent.entity.AgentDetailsEntity;
 import com.oracle.ticketing.dto.agent.AgentDetailsDTO;
-import com.oracle.ticketing.dto.common.TransRespDTO;
 import com.oracle.ticketing.exception.TicketingException;
 import com.oracle.ticketing.util.TicketingConstants;
 import org.modelmapper.ModelMapper;
@@ -33,7 +34,9 @@ public class AgentService {
         logger.info("Received request create agent --> " + agentDetailsDTO.getFullName());
         ModelMapper modelMapper = new ModelMapper();
         agentDetailsDTO.setId(null);
+        DbContextHolder.setDbType(DbType.REPLICA);
         AgentDetailsEntity existAgent = agentDetailsRepository.findByUserName(agentDetailsDTO.getUserName());
+        DbContextHolder.clearDbType();
         if(existAgent != null){
             logger.error("Unable to create agent. Agent with username " + agentDetailsDTO.getUserName() + " already exists in the system" );
             throw new TicketingException(TicketingConstants.BUSINESS_ERROR_CODE, "Unable to create agent. Agent with username " + agentDetailsDTO.getUserName() + " already exists in the system" );
@@ -41,7 +44,9 @@ public class AgentService {
         }
         agentDetailsDTO.setPassword(passwordEncoder.encode(agentDetailsDTO.getPassword()));
         AgentDetailsEntity agentDetailsEntity = modelMapper.map(agentDetailsDTO, AgentDetailsEntity.class);
+        DbContextHolder.setDbType(DbType.MASTER);
         agentDetailsRepository.save(agentDetailsEntity);
+        DbContextHolder.clearDbType();
 
     }
 
@@ -49,8 +54,10 @@ public class AgentService {
     public List<AgentDetailsEntity> getAllAgents() {
 
         logger.info(" Executing get all agents method");
-
-        return agentDetailsRepository.findAll();
+        DbContextHolder.setDbType(DbType.REPLICA);
+        List<AgentDetailsEntity>  agentDetailsEntities = agentDetailsRepository.findAll();
+        DbContextHolder.clearDbType();
+        return agentDetailsEntities;
 
     }
 
@@ -61,7 +68,9 @@ public class AgentService {
         validateUsername(agentDetailsDTO.getUserName());
         validatePassword(agentDetailsDTO.getPassword());
         logger.info("Agent login request received --> " + agentDetailsDTO.getUserName());
+        DbContextHolder.setDbType(DbType.REPLICA);
         AgentDetailsEntity agentDetailsEntity = agentDetailsRepository.findByUserName(agentDetailsDTO.getUserName());
+        DbContextHolder.clearDbType();
 
         if (agentDetailsEntity == null) {
 

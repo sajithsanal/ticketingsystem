@@ -4,15 +4,14 @@ metadata:
   creationTimestamp: null
   labels:
     app: agent
-  name: agent
+  name: agent-service
 spec:
   ports:
-  - name: 8181-8181
-    port: 8181
+  - port: 8181
     protocol: TCP
     targetPort: 8181
   selector:
     app: agent
-  type: LoadBalancer
+  type: NodePort
 status:
   loadBalancer: {}

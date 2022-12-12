@@ -11,29 +11,27 @@ buildscript {
 }
 
 plugins {
-    id 'org.springframework.boot' version '1.5.22.RELEASE'
+    id 'org.springframework.boot' version '2.3.3.RELEASE'
     id 'com.palantir.docker' version '0.25.0'
     id 'com.palantir.docker-run' version "0.25.0"
 }
 
 
-group 'com.oracle.test'
-version '1.0'
+group 'com.sample.test'
+version '1.5'
 
 apply plugin: 'java'
 
-
-jar {
-    archiveName('agent-system.jar')
+bootJar {
+    archiveFileName = "agent-system.jar"
 }
-
 
 docker {
     dependsOn build
     name "sajithsanal/agent-system-docker:${project.version}"
     dockerfile file('Dockerfile')
-    files jar.archivePath
-    buildArgs(['JAR_FILE': "${jar.getArchiveName()}"])
+    files bootJar.archiveFile
+    buildArgs(['JAR_FILE': "${bootJar.archiveFileName.get()}"])
 }
 
 dockerRun {
@@ -43,18 +41,17 @@ dockerRun {
     clean true
 }
 
-task deployToKubernetes(type:Exec) {
+task deployToKubernetes(type: Exec) {
     workingDir "$buildDir"
-    commandLine "kubectl", "apply", "-f", "$buildDir/../Deployment.yaml"
+    commandLine "kubectl", "apply", "-f", "$buildDir/../AgentDeployment.yaml"
 
 }
 
-task addServiceToKubernetes(type:Exec) {
+task addServiceToKubernetes(type: Exec) {
     workingDir "$buildDir"
-    commandLine "kubectl", "apply", "-f", "$buildDir/../Service.yaml"
+    commandLine "kubectl", "apply", "-f", "$buildDir/../AgentService.yaml"
 
 }
-
 
 
 sourceCompatibility = 1.8
@@ -64,8 +61,7 @@ repositories {
 }
 
 
-
 dependencies {
-    compile project (':ticketing-common')
+    compile project(':ticketing-common')
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
